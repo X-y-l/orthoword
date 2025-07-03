@@ -3,6 +3,8 @@
 A retro-themed word puzzle game inspired by old videocassettes and 1980s color palettes.
 Solve a 4x4 word grid using 8 shuffled clues.
 
+Try it here: https://x-y-l.github.io/orthoword/
+
 ---
 
 ## 📸 Screenshots
