@@ -1,9 +1,10 @@
 import React, { useState, useRef } from 'react';
 import './App.css';
 import Grid from './Grid';
+import HintsPanel from './HintsPanel';
 
 function App() {
-  const [grid, setGrid] = useState(Array(16).fill("")); 
+  const [grid, setGrid] = useState(Array(16).fill(""));
   const [highlightedRow, setHighlightedRow] = useState(null);
   const [highlightedColumn, setHighlightedColumn] = useState(null);
   const [highlightingOrientation, setHighlightingOrientation] = useState('row');
@@ -11,16 +12,16 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const hints = [
-    "Expensive cheeses are?",
-    "Company symbol",
-    "Above",
-    "Wet walk",
-    "Small fly",
-    "Soft radiance",
-    "Intense radiance",
-    "Ripped"
+    "Wave wings",
+    "Furry feet",
+    "Greek glyph",
+    "Scaled swimmer",
+    "Singular soul",
+    "Skirts outskirts",
+    "Winter weather",
+    "Indivisible item"
   ];
-
+  
   const cellRefs = Array.from({ length: 16 }, () => useRef(null));
 
   const toggleModal = () => {
@@ -35,7 +36,7 @@ function App() {
       setGrid(newGrid);
 
       let nextCell = null;
-      
+
       if (highlightingOrientation === 'row') {
         nextCell = index % 4 !== 3 ? index + 1 : null;
       } else if (highlightingOrientation === 'column') {
@@ -54,11 +55,10 @@ function App() {
     const colIndex = index % 4;
 
     if (activeCell === index) {
-      setHighlightingOrientation(prev => 
+      setHighlightingOrientation(prev =>
         prev === 'row' ? 'column' : 'row'
       );
-      
-      // Reset the other dimension's highlight
+
       if (highlightingOrientation === 'row') {
         setHighlightedRow(null);
         setHighlightedColumn(colIndex);
@@ -66,7 +66,6 @@ function App() {
         setHighlightedColumn(null);
         setHighlightedRow(rowIndex);
       }
-      
     } else {
       if (highlightingOrientation === 'row') {
         setHighlightedRow(rowIndex);
@@ -82,15 +81,26 @@ function App() {
   };
 
   const handleKeyDown = (e) => {
+    // Check if the active element is an input or textarea
+    const activeElement = document.activeElement;
+    const isInputActive = activeElement.tagName === 'INPUT' || 
+                         activeElement.tagName === 'TEXTAREA' ||
+                         activeElement.isContentEditable;
+
+    // If we're in an input element, don't handle the keyboard events
+    if (isInputActive) {
+      return;
+    }
+
     if (!activeCell && activeCell !== 0) return;
-  
-    // Space key handling to switch orientation
+
+    // Space key handling
     if (e.key === " ") {
-      setHighlightingOrientation(prev => 
+      e.preventDefault(); // Prevent scrolling
+      setHighlightingOrientation(prev =>
         prev === 'row' ? 'column' : 'row'
       );
-      
-      // Reset the other dimension's highlight
+
       if (highlightingOrientation === 'row') {
         const currentCol = activeCell % 4;
         setHighlightedRow(null);
@@ -100,30 +110,29 @@ function App() {
         setHighlightedColumn(null);
         setHighlightedRow(currentRow);
       }
-      
+
       return;
     }
 
     if (e.key === "Enter") {
       let newIndex = null;
-  
+
       const currentRow = Math.floor(activeCell / 4);
       const currentCol = activeCell % 4;
 
       if (highlightingOrientation === 'row') {
-        newIndex = (currentRow < 3) ? activeCell + 4 - currentCol: 0;
+        newIndex = (currentRow < 3) ? activeCell + 4 - currentCol : 0;
       } else if (highlightingOrientation === 'column') {
-        newIndex = (currentCol < 3) ? activeCell + 1 - 4*currentRow: 0;
+        newIndex = (currentCol < 3) ? activeCell + 1 - 4 * currentRow : 0;
       }
-  
+
       if (newIndex !== null) {
         setActiveCell(newIndex);
         cellRefs[newIndex].current.focus();
-  
-        // Update highlighting to match the new cell's row/column
+
         const newRow = Math.floor(newIndex / 4);
         const newCol = newIndex % 4;
-  
+
         if (highlightingOrientation === 'row') {
           setHighlightedRow(newRow);
           setHighlightedColumn(null);
@@ -132,34 +141,31 @@ function App() {
           setHighlightedRow(null);
         }
       }
-  
+
       return;
     }
-  
-    // Delete key handling to clear the cell and move backwards
+
+    // Delete key handling
     if (e.key === "Backspace" || e.key === "Delete") {
       const newGrid = [...grid];
       newGrid[activeCell] = "";
       setGrid(newGrid);
-  
+
       let previousCell = null;
-      
+
       if (highlightingOrientation === 'row') {
-        // Move to the previous cell in the row
         previousCell = activeCell % 4 !== 0 ? activeCell - 1 : null;
       } else if (highlightingOrientation === 'column') {
-        // Move to the previous cell in the column
         previousCell = activeCell >= 4 ? activeCell - 4 : null;
       }
-  
+
       if (previousCell !== null) {
         setActiveCell(previousCell);
         cellRefs[previousCell].current.focus();
-  
-        // Update highlighting to match the previous cell's row/column
+
         const newRow = Math.floor(previousCell / 4);
         const newCol = previousCell % 4;
-  
+
         if (highlightingOrientation === 'row') {
           setHighlightedRow(newRow);
           setHighlightedColumn(null);
@@ -168,15 +174,15 @@ function App() {
           setHighlightedRow(null);
         }
       }
-  
+
       return;
     }
-  
+
     const currentRow = Math.floor(activeCell / 4);
     const currentCol = activeCell % 4;
     let newIndex = activeCell;
-  
-    switch(e.key) {
+
+    switch (e.key) {
       case "ArrowUp":
         newIndex = currentRow > 0 ? activeCell - 4 : activeCell;
         break;
@@ -192,11 +198,10 @@ function App() {
       default:
         return;
     }
-  
-    // Update highlighting based on the new index
+
     const newRow = Math.floor(newIndex / 4);
     const newCol = newIndex % 4;
-  
+
     if (highlightingOrientation === 'row') {
       setHighlightedRow(newRow);
       setHighlightedColumn(null);
@@ -204,7 +209,7 @@ function App() {
       setHighlightedColumn(newCol);
       setHighlightedRow(null);
     }
-  
+
     setActiveCell(newIndex);
     cellRefs[newIndex].current.focus();
   };
@@ -219,13 +224,13 @@ function App() {
       </header>
 
       <div className="color-stripes">
-        <div className="stripe-red"></div>
-        <div className="stripe-green"></div>
-        <div className="stripe-blue"></div>
+        <div className="stripe-dark-orange"></div>
+        <div className="stripe-orange"></div>
+        <div className="stripe-yellow"></div>
       </div>
 
-      <div className="content-container">
-        <div className="grid-container">
+      <div className="flex gap-64 pb-20 h-full self-center items-center">
+        <div className="aspect-square">
           <Grid
             grid={grid}
             highlightedRow={highlightedRow}
@@ -235,16 +240,9 @@ function App() {
             handleCellClick={handleCellClick}
             cellRefs={cellRefs}
           />
-          <div className="hints-container">
-            <div className="hints-list bg-neutral-950 border-2 border-black p-4">
-              {hints.map((hint, index) => (
-                <div key={index} className="hint-row">
-                  <div className="hint-text">{hint}</div>
-                  <input type="text" className="hint-input" placeholder="" />
-                </div>
-              ))}
-            </div>
-          </div>
+        </div>
+        <div className="w-full">
+          <HintsPanel hints={hints} />
         </div>
       </div>
 
@@ -252,22 +250,31 @@ function App() {
         <>
           <div className="modal-overlay" onClick={toggleModal}></div>
           <div className="modal">
-            <div className="modal-content">
+            <div className="modal-content caveat-font">
               <h2>How to Play</h2>
               <p>Welcome to Orthoword!</p>
               <ul>
                 <li>There are 8 clues, each corresponding to unique 4-letter words.</li>
-                <li>You need to fill in the 4x4 grid with letters, where each row and column corresponds to one of the words.</li>
-                <li>The clues are shuffled, and it's up to you to figure out which words go where.</li>
-                <li>Click a cell to highlight the row or column (click again to switch), then type the letter.</li>
-                <li>Correctly fill the grid to win - good luck!</li>
+                <li>Fill in the 4x4 grid with letters so each row and column matches a word.</li>
+                <li>The clues are shuffled, so you need figure out which words go where.</li>
+                <li>You may use the boxes next to the clues to jot down possible words.</li>
               </ul>
+              <br></br>
+              <p>Controls:</p>
+              <ul>
+                <li><strong>Arrow Keys:</strong> Move between cells.</li>
+                <li><strong>Space:</strong> Toggle between horizontal and vertical.</li>
+                <li><strong>Enter:</strong> Move to the start of the next row or column.</li>
+                <li><strong>Delete:</strong> Remove a letter.</li>
+                <li><strong>Type:</strong> Fill the cell with a letter.</li>
+              </ul>
+              <br></br>
+              <p>Correctly fill the grid to win. Good luck!</p>
               <button className="close-btn" onClick={toggleModal}>X</button>
             </div>
           </div>
         </>
       )}
-      
     </div>
   );
 }

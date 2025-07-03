@@ -3,9 +3,6 @@
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(4, 1fr);
     gap: 10px;
-    position: relative;
-    left: -30%;
-    top: 10%;
     width: 450px;
     height: 450px;
 }
@@ -14,9 +11,9 @@
     width: 100%;
     height: 100%;
     background-color: #F0EDE6; /* Softer off-white */
-    border: 2px solid #D1C6B8; /* Muted beige border */
-    border-radius: 10px;
-    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.15); /* Softer shadow */
+    border: 3px solid #D1C6B8; /* Muted beige border */
+    border-radius: 15px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.6); /* Softer shadow */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -36,11 +33,55 @@
 .grid-cell.highlighted {
     background-color: #F2C94C; /* Muted gold-yellow */
     border-color: #D1A73E; /* Softer gold border */
-    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.6);
 }
   
 .grid-cell.active-cell {
     background-color: #E8913A; /* Softer orange */
     border-color: #BF7030; /* Muted burnt-orange border */
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.6);
+}
+
+.grid-cell.correct-row {
+    background-color: #6FCF97; /* Soft green for correct row */
+    border-color: #4CAF50; /* Darker green border */
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.6);
+    color: white; /* White text for better contrast */
+}
+
+.success-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 1.5rem;
+    text-align: center;
+    z-index: 1000;
+}
+
+/* Solved grid styling */
+.solved-grid .grid-cell {
+    background-color: #6FCF97; /* Soft green for solved grid */
+    border-color: #4CAF50; /* Darker green border */
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.6);
+    color: white; /* White text for better contrast */
+}
+
+/* Success message */
+.success-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 1.5rem;
+    text-align: center;
+    z-index: 1000;
 }
