@@ -7,8 +7,8 @@ Solve a 4x4 word grid using 8 shuffled clues.
 
 ## 📸 Screenshots
 
-![Screenshot 1](./screenshots/main.png)
-![Screenshot 2](./screenshots/instructions.png)
+![Screenshot 1](./screenshots/Main.png)
+![Screenshot 2](./screenshots/Instructions.png)
 
 ---
 
